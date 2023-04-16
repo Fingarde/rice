@@ -51,7 +51,7 @@
 
 - name: Copy bspwmrc
   ansible.builtin.copy:
-    src: /home/timothe/.rice/roles/bspwm/files/bspwmrc
+    src: bspwmrc
     dest: /home/timothe/.config/bspwm/bspwmrc
     owner: timothe
     group: timothe
