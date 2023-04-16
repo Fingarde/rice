@@ -15,7 +15,7 @@
 
 - name: Copy picom.conf
   ansible.builtin.copy:
-    src: /home/timothe/.rice/roles/picom/files/picom.conf
+    src: picom.conf
     dest: /home/timothe/.config/picom/picom.conf
     owner: timothe
     group: timothe

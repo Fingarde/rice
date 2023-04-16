@@ -15,7 +15,7 @@
 
 - name: Copy sxhkdrc
   ansible.builtin.copy:
-    src: /home/timothe/.rice/roles/sxhkd/files/sxhkdrc
+    src: sxhkdrc
     dest: /home/timothe/.config/sxhkd/sxhkdrc
     owner: timothe
     group: timothe
