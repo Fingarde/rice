@@ -1,0 +1,41 @@
+#! /bin/bash
+
+workspaces=( 1 2 3 4 5 6 7 8 9 10 )
+
+workspaces() {
+	str="(box "
+
+	occupied=$(bspc query -D -d .occupied --names)
+	active=$(bspc query -D -d .active --names)
+
+	for i in "${workspaces[@]}"
+	do
+		state="default"
+
+		echo "$occupied" | grep -qe "$i$" && state="occupied"
+		echo "$active" | grep -qe "$i$" && state="active"
+
+		read -r -d '' entry <<- EOM
+			(box :class "ws $state" 
+				(overlay
+                    (label :text "$i")
+                    (button :onclick "bspc desktop -f $i")
+                )
+			)
+		EOM
+
+		
+		str+="$entry"
+		
+		
+	done
+
+
+	str="$str)"
+	echo $str
+}
+
+workspaces
+bspc subscribe all | while read -r _ ; do
+	workspaces
+done

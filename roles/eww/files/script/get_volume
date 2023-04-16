@@ -1,0 +1,28 @@
+#! /bin/bash
+
+function get_state {
+   volume=$(amixer get Master | grep -o -m 1 "[0-9]*%" | tr -d "%")
+
+    if [ "$volume" -eq 0 ]; then
+         echo "0"
+    elif [ "$volume" -lt 33 ]; then
+         echo "1"
+    elif [ "$volume" -lt 66 ]; then
+         echo "2"
+    else
+         echo "3"
+    fi 
+}
+
+function get_volume() {
+    volume=$(amixer get Master | grep -o -m 1 "[0-9]*%" | tr -d "%")
+    max_volume=$([ "$volume" -gt 100 ] && echo "$volume" || echo 100 )
+    state=$(get_state)
+    echo "{ \"volume\": \"$volume\", \"max_volume\": \"$max_volume\", \"state\": \"$state\"}"
+}
+
+echo "$(get_volume)"
+while :; do
+    echo "$(get_volume)"
+    sleep 0.1
+done

@@ -1,0 +1,10 @@
+#! /bin/bash
+
+variable=$1
+
+if [ $(eww get $variable) == true ]
+then
+    eww update $variable=false
+else
+    eww update $variable=true
+fi

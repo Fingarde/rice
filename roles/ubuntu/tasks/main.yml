@@ -23,3 +23,12 @@
     state: present
   become: true
   become_method: sudo
+
+- include_role:
+    name: feh
+
+- include_role:
+    name: rofi
+
+- include_role:
+    name: kitty

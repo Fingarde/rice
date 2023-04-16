@@ -1,0 +1,154 @@
+(defvar eww "eww -c $HOME/.config/eww")
+
+
+(defpoll time :interval "5s"
+  `date +'{"hour":"%H","min":"%M"}'`)
+
+(defpoll date :interval "5s"
+  `date +'{"day":"%d","month":"%m","year":"%Y"}'`)
+
+(defpoll spotify :interval "5s"
+  `python /home/timothe/bin/polybar/spotify.py `)
+(defpoll spotify_running :interval "5s"
+  `pgrep spotify > /dev/null && echo true || echo false`)
+
+(deflisten volume "script/get_volume")
+(defpoll battery :interval "5s" "script/get_battery")
+
+(defvar time_reveal false)
+(defpoll whoami :interval "5s"
+  `whoami`)
+
+
+(deflisten workspaces "script/bspwm")
+
+
+
+(defwindow bar
+    :stacking "fg"
+    :windowtype "dock"
+    :wm-ignore false
+    :reserve (struts :distance "30px" :side "top")
+    :geometry (geometry :width "98%" :anchor "top center")
+    :stacking "bg"
+    
+    (centerbox
+        (box 
+            (box :space-evenly false :halign "start"
+                (workspace)
+            )
+            (box :space-evenly false :halign "start"
+                (spotify)
+            )
+        )
+        
+        (box :space-evenly false :halign "center"
+            (time)
+        )
+        (box :space-evenly false :halign "end"
+            (right)
+        )
+    )
+)
+
+(defwidget spotify []
+    (box :class "module" :visible spotify_running
+        
+        (box :orientation "h" :class "spotify"
+           (label :text spotify)
+        )
+    )
+)
+
+(defwidget time []
+    (box :class "module" 
+        (box :orientation "h" :class "time"
+            (eventbox 
+                :onhover "eww update time_reveal=true"
+                :onhoverlost "eww update time_reveal=false"
+
+                (overlay :class "date"
+                    (revealer :reveal time_reveal
+                        (label :text "${date.day}/${date.month}/${date.year}")
+                    )
+                    (revealer :reveal "${!time_reveal}"
+                        (label :text "${time.hour}:${time.min}")
+                    )
+                )
+            )
+        )
+    )
+)
+
+(defvar music_reveal false)
+(defvar battery_reveal false)
+
+(defwidget right []
+    (box :class "module" 
+        (box :orientation "h" :class "right" :space-evenly false
+            (label :text whoami :class "whoami")
+            (eventbox 
+                :onhover "eww update music_reveal=true"
+                :onhoverlost "eww update music_reveal=false"
+                :onscroll "script/volume {}"
+                (box :orientation "h" :space-evenly false
+                    (box
+                        :visible music_reveal
+                        :class "center_info" 
+                        :space-evenly false
+                        (scale
+                            :class "center_info"
+                            :min 0
+                            :max "${volume.max_volume + 1}"
+                            :value "${volume.volume}"
+                            :orientation "h"
+
+                            :onchange "script/volume set {}"
+                        
+                        )
+                            
+                            (label
+                                :class "center_labels"
+                                :text "${volume.volume}%"
+                                :justify "right"
+                                :xalign 0 
+                            )
+                    )
+                    (image :path "images/volume-${volume.state}.svg"  :image-width "15"  :class "icon" )
+                )
+            )
+            
+            (image :path "images/wifi.svg"  :image-width "15"  :class "icon" )
+            
+            (eventbox 
+                :onhover "eww update battery_reveal=true"
+                :onhoverlost "eww update battery_reveal=false"
+                (box :orientation "h" :space-evenly false
+                    (box
+                        :visible battery_reveal
+                        :class "center_info" 
+                        :space-evenly false
+                        
+                        (label
+
+                            :text "${battery.battery}%"
+                            :xalign 2
+                        )
+                    )
+                    (image :path "images/battery-${battery.icon}.svg"  :image-width "15"  :class "icon" )
+                )
+            )
+            
+            (image :path "images/power.svg"  :image-width "15"  :class "icon" )
+        )
+    )
+)
+
+
+(defwidget workspace []
+    (box :class "module" 
+        (box :orientation "h" :class "workspace"
+            (literal :content workspaces)
+        )
+    )
+)

@@ -1,0 +1,22 @@
+- name: Update system
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  become: true
+  become_method: sudo
+
+- name: Create kitty directory
+  ansible.builtin.file:
+    path:  ~/.config/kitty
+    state: directory
+
+# copy all files to ~/.config/kitty
+- name: Copy kitty config files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: ~/.config/kitty/
+    owner: timothe
+    group: timothe
+    mode: 0644
+  with_fileglob:
+    - "{{ role_path }}/files/*"

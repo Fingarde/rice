@@ -1,0 +1,66 @@
+#! /bin/bash
+
+# get network state with nmcli
+network_wifi=$(nmcli device | grep "wifi" | awk '{print $3}')
+wifi_ssid=$(nmcli device | grep "wifi" | awk '{print $4}')
+network_ethernet=$(nmcli device | grep "ethernet" | awk '{print $3}')
+
+echo "{ \"network_wifi\": \"$network_wifi\", \"network_ethernet\": \"$network_ethernet\"}"
+
+# list wifi networks and escale each colmun with awk
+wifi_list=$(nmcli -f IN-USE,SIGNAL,SSID device wifi list | tr -s " " | grep -v "IN-USE" )*
+
+#if fist char is "*" then set it to 1 else 0
+wifi_list=$(echo "$wifi_list" | awk '{if ($1 == "*") print "1 " $2 " " $3; else print "0 " $1 " " $2}')
+
+
+# for each network ask nmcli if network is known
+known=$(nmcli -f TYPE,NAME conn show |  grep -v "NAME" | grep "wifi" | tr -s " " | cut -d " " -f 2- )
+
+
+# use \n as delimiter
+IFS=$'\n'
+for i in $wifi_list; do
+  ssid=$(echo "$i" | awk '{print $3}')
+  # set column 2 to 1 if network is known
+    if echo $known | grep -q -- "$ssid"; then
+        # modify line 
+        wifi_list=$(echo "$wifi_list" | sed "s/$i/1 $i/")
+    else
+        wifi_list=$(echo "$wifi_list" | sed "s/$i/0 $i/")
+    fi
+done
+
+#echo $wifi_list
+
+
+# sort wifi networks with 7th column (signal strength)
+wifi_list=$(echo "$wifi_list" | sort -n -k 4 -r)
+
+
+# sort wifi already known
+wifi_list=$(echo "$wifi_list" | sort -n -k 1 -r)
+
+wifi_list=$(echo "$wifi_list" | sort -n -k 2 -r)
+
+echo "{ \"wifi_list\": ["
+
+# print wifi list
+for i in $wifi_list; do
+    echo "$i" | awk '{print "\t{ \"known\": \""$1"\", \"in_use\": \""$2"\", \"signal\":  \""$3"\", \"ssid\": \""$4"\"},"}'
+done
+
+echo "]}"
+
+# list vpn connection
+vpn_list=$(nmcli -f TYPE,NAME conn show | grep "vpn" | tr -s " " | cut -d " " -f 2- )
+
+echo "{ \"vpn_list\": ["
+for i in $vpn_list; do
+# remove last character if space
+    i=$(echo "$i" | sed 's/.$//')
+    
+   echo -e "\t{ \"name\": \"$i\" },"
+done
+
+echo "]}"

@@ -1,0 +1,16 @@
+#! /bin/bash
+
+action=$1
+value=$2
+
+
+
+if [ "$action" = "up" ]; then
+    pactl set-sink-volume @DEFAULT_SINK@ +5%
+elif [ "$action" = "down" ]; then
+    pactl set-sink-volume @DEFAULT_SINK@ -5%
+elif [ "$action" = "set" ]; then
+    pactl set-sink-volume @DEFAULT_SINK@ $value%
+elif [ "$action" = "mute" ]; then
+    pactl set-sink-mute @DEFAULT_SINK@ toggle
+fi

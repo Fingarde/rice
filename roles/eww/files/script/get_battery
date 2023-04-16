@@ -1,0 +1,23 @@
+#! /bin/bash
+
+function battery() {
+    battery=$(cat /sys/class/power_supply/BAT0/capacity)
+    state=$(cat /sys/class/power_supply/BAT0/status)
+
+    if [ "$state" = "Charging" ]; then
+        icon="0"
+    elif [ "$state" = "Discharging" ]; then
+        if [ "$battery" -lt 25 ]; then
+            icon="1"
+        elif [ "$battery" -lt 50 ]; then
+            icon="2"
+        elif [ "$battery" -lt 75 ]; then
+            icon="3"
+        else
+            icon="4"
+        fi
+    fi
+    echo "{ \"battery\": \"$battery\", \"icon\": \"$icon\"}"
+}
+
+battery

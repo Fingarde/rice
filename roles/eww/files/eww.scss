@@ -1,0 +1,92 @@
+* {
+    all: unset;
+    font-family: "Liga SFMono Nerd Font";
+   
+}
+
+.bar {
+    background-color: transparent;
+}
+
+.center_info {
+    highlight {
+        all: unset;
+        background: white;
+        border-radius: 5px;
+    }
+
+    trough {
+        all: unset;
+        background-color: #707d85;
+        border-radius: 5px;
+        min-width: 112px;
+        min-height: 8px;               
+    }
+}
+
+.center_labels {
+    min-width: 32px;
+}
+
+.module {
+    background-color: #161b20;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.workspace {
+    padding: 0px 10px;
+    
+    .ws {
+        label {
+            padding: 8px;
+            color: #707d85;
+        }
+    }
+
+    .active {
+        font-weight: bold;
+        background-color: #0c0e11;
+
+        border-bottom: 2px solid #fff;
+
+        label {
+            color: #fff;
+        }
+    }
+
+    .occupied {
+        font-weight: bold;
+        background-color: #0c0e11;
+    }
+}
+
+.time {
+    padding: 0px 10px;
+
+    label {
+        padding: 8px;
+        color: #707d85;
+    }
+}
+
+.spotify {
+    padding: 0px 10px;
+
+    label {
+        padding: 8px;
+        color: #707d85;
+    }
+}
+
+.right {
+    padding: 0px 10px;
+
+    label {
+        padding: 8px;
+        color: #707d85;
+    }
+
+    image {
+        padding-right: 8px;
+    }
+}

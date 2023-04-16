@@ -1,0 +1,13 @@
+# copy background.png to ~/.config/feh
+- name: Create feh directory
+  ansible.builtin.file:
+    path:  ~/.config/feh
+    state: directory
+
+- name: Copy background.png
+  ansible.builtin.copy:
+    src: background.png
+    dest: ~/.config/feh/background.png
+    owner: timothe
+    group: timothe
+    mode: 0644
