@@ -3,7 +3,7 @@
     update_cache: yes
     cache_valid_time: 3600
 
-- name: Install git
+- name: Install picom
   apt:
     name: picom
     state: present
