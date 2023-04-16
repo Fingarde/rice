@@ -70,25 +70,11 @@
     path:  ~/.config/eww
     state: directory
 
-# copy all files to ~/.config/eww
-- name: Copy eww config files
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: ~/.config/eww/
-    owner: timothe
-    group: timothe
-    mode: 0644
-  with_fileglob:
-    - "{{ role_path }}/files/*"
+- name: "Copy eww config files"
+  synchronize:
+    src: "{{ my_role_path }}/files/"
+    dest:  ~/.config/eww/
 
-# copy all files and folders to ~/.config/eww
-- name: Copy eww config files
-  ansible.builtin.copy:
-    src: "{{ role_path }}/files/*"
-    dest: ~/.config/eww/
-    owner: timothe
-    group: timothe
-    mode: 0644
 
 # chmod +x each file in ~/.config/eww/script
 - name: Make scripts executable
