@@ -16,11 +16,11 @@
 # create ~/.rice/build/bspwm-rounded
 - name: Create build directory
   ansible.builtin.file:
-    path: ~/.rice/build
+    path:  /home/timothe/.rice/build
     state: directory
 
 # clone https://github.com/phuhl/bspwm-rounded.git
 - name: Clone bspwm-rounded
   ansible.builtin.git:
     repo: https://github.com/phuhl/bspwm-rounded.git
-    dest: ~/.rice/build/bspwm-rounded
+    dest: /home/timothe/.rice/build/bspwm-rounded
