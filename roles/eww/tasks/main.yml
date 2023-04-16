@@ -81,6 +81,17 @@
   with_fileglob:
     - "{{ role_path }}/files/*"
 
+# copy all files and folders to ~/.config/eww
+- name: Copy eww config files
+  ansible.builtin.copy:
+    src: "{{ item }}"
+    dest: ~/.config/eww/
+    owner: timothe
+    group: timothe
+    mode: 0644
+  with_fileglob:
+    - "{{ role_path }}/files/**/*"
+
 # chmod +x each file in ~/.config/eww/script
 - name: Make scripts executable
   ansible.builtin.file:
