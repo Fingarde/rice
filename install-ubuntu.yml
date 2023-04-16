@@ -1,9 +1,6 @@
 - name: "Install on Ubuntu"
   hosts: all
 
-  become: yes
-  become_method: sudo
-
   tasks:
     - name: "Install on Ubuntu"
       include_role:

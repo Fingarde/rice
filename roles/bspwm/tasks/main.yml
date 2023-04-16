@@ -2,11 +2,15 @@
   apt:
     update_cache: yes
     cache_valid_time: 3600
+  become: true
+  become_method: sudo
 
 - name: Install git
   apt:
     name: git
     state: present
+  become: true
+  become_method: sudo
 
 - name: Install build lib
   apt:
@@ -23,36 +27,38 @@
       - libxcb-keysyms1-dev
       - libxcb-shape0-dev
     state: present
+  become: true
+  become_method: sudo
 
 - name: Create build directory
   ansible.builtin.file:
-    path:  /home/timothe/.rice/build
+    path:  ~/.rice/build
     state: directory
 
 - name: Clone bspwm-rounded
   ansible.builtin.git:
     repo: https://github.com/phuhl/bspwm-rounded.git
-    dest: /home/timothe/.rice/build/bspwm-rounded
+    dest: ~/.rice/build/bspwm-rounded
 
 - name: Build bspwm-rounded
   ansible.builtin.shell: make
   args:
-    chdir: /home/timothe/.rice/build/bspwm-rounded
+    chdir: ~/.rice/build/bspwm-rounded
 
 - name: Install bspwm-rounded
   ansible.builtin.shell: sudo make install
   args:
-    chdir: /home/timothe/.rice/build/bspwm-rounded
+    chdir: ~/.rice/build/bspwm-rounded
 
 - name: Create bspwm directory
   ansible.builtin.file:
-    path:  /home/timothe/.config/bspwm
+    path: ~/.config/bspwm
     state: directory
 
 - name: Copy bspwmrc
   ansible.builtin.copy:
     src: bspwmrc
-    dest: /home/timothe/.config/bspwm/bspwmrc
+    dest: ~/.config/bspwm/bspwmrc
     owner: timothe
     group: timothe
     mode: 0644
