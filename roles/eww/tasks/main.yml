@@ -52,11 +52,20 @@
 
 
 - name: Install eww
-  ansible.builtin.shell: cp ~/.rice/build/eww/target/release/eww /usr/local/bin
-  become: true
-  become_method: sudo
+  ansible.builtin.shell: cp ~/.rice/build/eww/target/release/eww ~/.local/bin/eww
+
+# check if path contains ~/.local/bin
+- name: Check if path contains ~/.local/bin
+  ansible.builtin.shell: echo $PATH | grep -q ~/.local/bin
+  register: path_contains_local_bin
+  ignore_errors: true
+
+# if path does not contain ~/.local/bin, add it
+- name: Add ~/.local/bin to path
+  ansible.builtin.shell: echo 'export PATH="$PATH:$HOME/.local/bin"' >> ~/.bashrc
+  when: path_contains_local_bin.rc != 0
 
 - name: Create eww directory
   ansible.builtin.file:
-    path:  /home/timothe/.config/eww
+    path:  ~/.config/eww
     state: directory
