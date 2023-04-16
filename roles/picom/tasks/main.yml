@@ -1,0 +1,22 @@
+- name: Update system
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install git
+  apt:
+    name: picom
+    state: present
+
+- name: Create picom directory
+  ansible.builtin.file:
+    path:  /home/timothe/.config/picom
+    state: directory
+
+- name: Copy picom.conf
+  ansible.builtin.copy:
+    src: /home/timothe/.rice/roles/picom/files/picom.conf
+    dest: /home/timothe/.config/picom/picom.conf
+    owner: timothe
+    group: timothe
+    mode: 0644

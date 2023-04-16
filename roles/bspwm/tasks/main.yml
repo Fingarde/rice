@@ -24,26 +24,35 @@
       - libxcb-shape0-dev
     state: present
 
-# create ~/.rice/build/bspwm-rounded
 - name: Create build directory
   ansible.builtin.file:
     path:  /home/timothe/.rice/build
     state: directory
 
-# clone https://github.com/phuhl/bspwm-rounded.git
 - name: Clone bspwm-rounded
   ansible.builtin.git:
     repo: https://github.com/phuhl/bspwm-rounded.git
     dest: /home/timothe/.rice/build/bspwm-rounded
 
-# build bspwm-rounded
 - name: Build bspwm-rounded
   ansible.builtin.shell: make
   args:
     chdir: /home/timothe/.rice/build/bspwm-rounded
 
-# run make install
 - name: Install bspwm-rounded
   ansible.builtin.shell: sudo make install
   args:
     chdir: /home/timothe/.rice/build/bspwm-rounded
+
+- name: Create bspwm directory
+  ansible.builtin.file:
+    path:  /home/timothe/.config/bspwm
+    state: directory
+
+- name: Copy bspwmrc
+  ansible.builtin.copy:
+    src: /home/timothe/.rice/roles/bspwm/files/bspwmrc
+    dest: /home/timothe/.config/bspwm/bspwmrc
+    owner: timothe
+    group: timothe
+    mode: 0644

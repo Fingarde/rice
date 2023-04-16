@@ -1,3 +1,11 @@
-# run bspwm role
 - include_role:
     name: bspwm
+
+- include_role:
+    name: sxhkd
+
+- include_role:
+    name: picom
+
+- include_role:
+    name: eww

@@ -1,0 +1,22 @@
+- name: Update system
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Install sxhkd
+  apt:
+    name: sxhkd
+    state: present
+
+- name: Create sxhkd directory
+  ansible.builtin.file:
+    path:  /home/timothe/.config/sxhkd
+    state: directory
+
+- name: Copy sxhkdrc
+  ansible.builtin.copy:
+    src: /home/timothe/.rice/roles/sxhkd/files/sxhkdrc
+    dest: /home/timothe/.config/sxhkd/sxhkdrc
+    owner: timothe
+    group: timothe
+    mode: 0644
