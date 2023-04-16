@@ -14,6 +14,14 @@
       - make
       - gcc
       - g++
+      - libxinerama-dev
+      - libxcb-xinerama0-dev
+      - libxcb-util-dev
+      - libxcb-icccm4-dev
+      - libxcb-randr0-dev
+      - libxcb-ewmh-dev
+      - libxcb-keysyms1-dev
+      - libxcb-shape0-dev
     state: present
 
 # create ~/.rice/build/bspwm-rounded
@@ -27,3 +35,15 @@
   ansible.builtin.git:
     repo: https://github.com/phuhl/bspwm-rounded.git
     dest: /home/timothe/.rice/build/bspwm-rounded
+
+# build bspwm-rounded
+- name: Build bspwm-rounded
+  ansible.builtin.shell: make
+  args:
+    chdir: /home/timothe/.rice/build/bspwm-rounded
+
+# run make install
+- name: Install bspwm-rounded
+  ansible.builtin.shell: sudo make install
+  args:
+    chdir: /home/timothe/.rice/build/bspwm-rounded
