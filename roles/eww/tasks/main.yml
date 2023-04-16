@@ -72,7 +72,7 @@
 
 - name: "Copy eww config files"
   synchronize:
-    src: "{{ my_role_path }}/files/"
+    src: "{{ role_path }}/files/"
     dest:  ~/.config/eww/
 
 
