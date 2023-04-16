@@ -2,12 +2,16 @@
   apt:
     update_cache: yes
     cache_valid_time: 3600
+  become: true
+  become_method: sudo
 
 - name: Install picom
   apt:
     name: picom
     state: present
-
+  become: true
+  become_method: sudo
+  
 - name: Create picom directory
   ansible.builtin.file:
     path:  /home/timothe/.config/picom
