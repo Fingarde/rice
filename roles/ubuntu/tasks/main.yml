@@ -16,6 +16,9 @@
       - rofi
       - dunst
       - feh
+      - kitty
+      - flameshot
+      - firefox
 
     state: present
   become: true
