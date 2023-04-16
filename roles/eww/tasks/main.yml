@@ -79,7 +79,7 @@
 # chmod +x each file in ~/.config/eww/script
 - name: Make scripts executable
   ansible.builtin.file:
-    path: ~/.config/eww/script/{{ item }}
+    path: {{ item }}
     mode: 0755
   with_fileglob:
     - ~/.config/eww/script/*
