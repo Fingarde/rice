@@ -10,7 +10,7 @@
 
 - name: Install build lib
   apt:
-    name:
+    name: make gcc g++
     state: present
 
 # create ~/.rice/build/bspwm-rounded
