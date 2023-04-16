@@ -17,17 +17,6 @@
 - name: Install rust
   ansible.builtin.shell: /tmp/sh.rustup.rs -y
 
-# check if path is already set
-- name: Check if rust is already in path
-  ansible.builtin.shell: grep -q 'export PATH="$HOME/.cargo/bin:$PATH"' ~/.bashrc
-  register: rust_in_path
-  ignore_errors: true
-
-# add rust to path
-- name: Add rust to path
-  ansible.builtin.shell: echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> ~/.bashrc
-  when: rust_in_path.rc != 0
-
 - name: Create build directory
   ansible.builtin.file:
     path:  ~/.rice/build
@@ -39,10 +28,28 @@
     repo: https://github.com/elkowar/eww.git
     dest: ~/.rice/build/eww
 
+# install deps
+- name: Install deps
+  apt:
+    pkg:
+      - pkg-config
+      - libglib2.0-dev
+      - libcairo2-dev 
+      - libgdk3.0-cil-dev 
+      - libgdk-pixbuf2.0-dev 
+      - libatk1.0-dev
+      - libpango1.0-dev 
+      - libgtk-3-dev
+  become: true
+  become_method: sudo
+
 - name: Build eww
   ansible.builtin.shell: cargo build --release --no-default-features --features x11
   args:
     chdir: ~/.rice/build/eww
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ ansible_env.HOME }}/.cargo/bin"
+
 
 - name: Install eww
   ansible.builtin.shell: cp ~/.rice/build/eww/target/release/eww /usr/local/bin
