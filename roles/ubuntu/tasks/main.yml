@@ -9,3 +9,14 @@
 
 - include_role:
     name: eww
+
+- name: Install rofi
+  apt:
+    pkg: 
+      - rofi
+      - dunst
+      - feh
+
+    state: present
+  become: true
+  become_method: sudo
