@@ -61,4 +61,4 @@
     dest: ~/.config/bspwm/bspwmrc
     owner: timothe
     group: timothe
-    mode: 0644
+    mode: 0755
