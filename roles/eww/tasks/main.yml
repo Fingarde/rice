@@ -87,4 +87,4 @@
     path: ~/.config/eww/script/{{ item }}
     mode: 0755
   with_fileglob:
-    - "{{ role_path }}/files/script/*"
+    - ~/.config/eww/script/{{ item }}
