@@ -1,0 +1,3 @@
+# run bspwm role
+- include_role:
+    name: bspwm
